@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do Yeon Ko — Brand & Commercial Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* =============================================
+   DESIGN TOKENS
+   ============================================= */
+:root {
+  --bg:           #F9F8F6;
+  --bg2:          #F1EFE9;
+  --bg3:          #E6E3DC;
+  --ink:          #1A1917;
+  --ink2:         #5C5956;
+  --ink3:         #9C9894;
+  --purple:       #7F77DD;
+  --purple-light: #EEEDFE;
+  --purple-mid:   #534AB7;
+  --purple-dark:  #3C3489;
+  --teal:         #1D9E75;
+  --teal-light:   #E1F5EE;
+  --border:       rgba(26,25,23,0.09);
+  --border2:      rgba(26,25,23,0.16);
+  --radius:       10px;
+  --radius-lg:    16px;
+  --font-sans:    'DM Sans', 'Noto Sans KR', sans-serif;
+  --font-mono:    'DM Mono', 'Noto Sans KR', monospace;
+  --ease:         cubic-bezier(0.4,0,0.2,1);
+  --t:            0.22s;
+}
+[data-theme="dark"] {
+  --bg:           #131311;
+  --bg2:          #1C1B19;
+  --bg3:          #252420;
+  --ink:          #F0EDE8;
+  --ink2:         #A6A3A0;
+  --ink3:         #686461;
+  --purple:       #9B94E8;
+  --purple-light: #25205A;
+  --purple-mid:   #AFA9EC;
+  --purple-dark:  #CECBF6;
+  --teal:         #3DBEA0;
+  --teal-light:   #043328;
+  --border:       rgba(240,237,232,0.07);
+  --border2:      rgba(240,237,232,0.14);
+}
+
+/* =============================================
+   RESET
+   ============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.65;
+  transition: background var(--t) var(--ease), color var(--t) var(--ease);
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--purple-light); color: var(--purple-dark); }
+
+/* =============================================
+   LAYOUT
+   ============================================= */
+.container { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+.section { padding: 96px 0; border-bottom: 0.5px solid var(--border); }
+.section:last-of-type { border-bottom: none; }
+
+/* =============================================
+   NAV
+   ============================================= */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: var(--bg); border-bottom: 0.5px solid var(--border);
+  transition: background var(--t) var(--ease);
+  backdrop-filter: blur(8px);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px; padding: 0 28px; max-width: 1080px; margin: 0 auto;
+}
+.nav-logo {
+  font-size: 12px; font-weight: 500; color: var(--purple);
+  letter-spacing: 0.1em; font-family: var(--font-mono);
+}
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav-links a { font-size: 13px; color: var(--ink2); transition: color var(--t); }
+.nav-links a:hover { color: var(--ink); }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.theme-toggle {
+  width: 38px; height: 20px; background: var(--bg3);
+  border: 0.5px solid var(--border2); border-radius: 10px;
+  cursor: pointer; position: relative; transition: background var(--t);
+  flex-shrink: 0;
+}
+.theme-toggle::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 12px; height: 12px; border-radius: 50%; background: var(--ink3);
+  transition: transform var(--t), background var(--t);
+}
+[data-theme="dark"] .theme-toggle::after { transform: translateX(18px); background: var(--purple); }
+.hamburger { display: none; flex-direction: column; gap: 4px; cursor: pointer; padding: 4px; }
+.hamburger span { display: block; width: 20px; height: 1.5px; background: var(--ink); transition: all var(--t); }
+.mobile-menu {
+  display: none; position: fixed; top: 56px; left: 0; right: 0;
+  background: var(--bg); border-bottom: 0.5px solid var(--border);
+  padding: 16px 28px; z-index: 99;
+}
+.mobile-menu.open { display: block; }
+.mobile-menu a {
+  display: block; padding: 11px 0; font-size: 15px;
+  color: var(--ink2); border-bottom: 0.5px solid var(--border);
+}
+.mobile-menu a:last-child { border-bottom: none; }
+
+/* =============================================
+   SCROLL REVEAL
+   ============================================= */
+.reveal {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+
+/* =============================================
+   SHARED COMPONENTS
+   ============================================= */
+.section-eyebrow {
+  font-size: 11px; font-family: var(--font-mono); color: var(--purple);
+  letter-spacing: 0.1em; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px; text-transform: uppercase;
+}
+.section-eyebrow::after { content: ''; flex: 1; height: 0.5px; background: var(--border2); }
+.section-title {
+  font-size: clamp(22px, 3vw, 30px); font-weight: 300;
+  letter-spacing: -0.015em; line-height: 1.2; margin-bottom: 40px; color: var(--ink);
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px; background: var(--purple); color: #fff;
+  font-size: 14px; font-weight: 500; border-radius: var(--radius);
+  border: none; cursor: pointer; font-family: var(--font-sans);
+  transition: background var(--t), transform var(--t);
+}
+.btn-primary:hover { background: var(--purple-mid); transform: translateY(-1px); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px; background: transparent; color: var(--purple);
+  font-size: 14px; font-weight: 500; border-radius: var(--radius);
+  border: 0.5px solid var(--purple); cursor: pointer; font-family: var(--font-sans);
+  transition: all var(--t);
+}
+.btn-ghost:hover { background: var(--purple-light); transform: translateY(-1px); }
+
+/* =============================================
+   01. HERO
+   ============================================= */
+#hero { padding-top: 148px; padding-bottom: 100px; border-bottom: 0.5px solid var(--border); }
+.hero-status {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 11px; font-family: var(--font-mono); color: var(--teal);
+  background: var(--teal-light); border: 0.5px solid rgba(29,158,117,0.2);
+  border-radius: 999px; padding: 4px 12px; margin-bottom: 32px; letter-spacing: 0.04em;
+}
+.hero-status::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
+  animation: pulse 2s infinite;
+}
+.hero-name {
+  font-size: 12px; font-weight: 400; color: var(--ink3);
+  font-family: var(--font-mono); letter-spacing: 0.1em; margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.hero-title {
+  font-size: clamp(40px, 6vw, 68px); font-weight: 300;
+  line-height: 1.08; letter-spacing: -0.025em; color: var(--ink);
+  margin-bottom: 28px;
+}
+.hero-title em { font-style: normal; color: var(--purple); }
+.hero-sub {
+  font-size: clamp(15px, 1.7vw, 17px); color: var(--ink2);
+  max-width: 480px; line-height: 1.7; margin-bottom: 36px;
+}
+.hero-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 44px; }
+.hero-tag {
+  font-size: 12px; padding: 5px 13px; border-radius: 999px;
+  border: 0.5px solid var(--border2); color: var(--ink2);
+  background: transparent; letter-spacing: 0.01em;
+}
+.hero-metrics {
+  display: flex; gap: 0; margin-bottom: 44px;
+  border: 0.5px solid var(--border2); border-radius: var(--radius-lg);
+  overflow: hidden; width: fit-content;
+}
+.hero-metric {
+  padding: 16px 28px; text-align: center;
+  border-right: 0.5px solid var(--border2); min-width: 110px;
+}
+.hero-metric:last-child { border-right: none; }
+.metric-num {
+  font-size: 26px; font-weight: 500; color: var(--purple);
+  font-family: var(--font-mono); letter-spacing: -0.02em; display: block;
+}
+.metric-label { font-size: 11px; color: var(--ink3); margin-top: 3px; display: block; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* =============================================
+   02. STRATEGIC PROFILE
+   ============================================= */
+.profile-intro {
+  max-width: 640px; font-size: 17px; color: var(--ink2);
+  line-height: 1.75; margin-bottom: 48px; font-weight: 300;
+}
+.profile-intro strong { color: var(--ink); font-weight: 500; }
+.profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.profile-card {
+  background: var(--bg2); border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg); padding: 28px 24px;
+  transition: border-color var(--t), transform var(--t), background var(--t);
+}
+.profile-card:hover {
+  border-color: rgba(127,119,221,0.35);
+  transform: translateY(-2px); background: var(--bg);
+}
+.profile-lens {
+  font-size: 10px; font-family: var(--font-mono); color: var(--purple);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+}
+.profile-card-title {
+  font-size: 17px; font-weight: 500; color: var(--ink);
+  line-height: 1.3; margin-bottom: 12px;
+}
+.profile-card-body {
+  font-size: 13px; color: var(--ink2); line-height: 1.7; margin-bottom: 20px;
+}
+.profile-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.profile-tag {
+  font-size: 11px; padding: 2px 8px; border-radius: 999px;
+  border: 0.5px solid var(--border2); color: var(--ink3);
+}
+
+/* =============================================
+   03. SELECTED CASES
+   ============================================= */
+.cases-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px; margin-bottom: 32px; flex-wrap: wrap;
+}
+.case-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.case-filter {
+  font-size: 12px; padding: 5px 12px; border-radius: 999px;
+  border: 0.5px solid var(--border2); color: var(--ink2); cursor: pointer;
+  transition: all var(--t); background: transparent; font-family: var(--font-sans);
+}
+.case-filter.active, .case-filter:hover {
+  background: var(--purple-light); color: var(--purple-dark);
+  border-color: rgba(127,119,221,0.3);
+}
+.cases-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.case-card {
+  background: var(--bg2); border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+  transition: border-color var(--t), transform var(--t);
+}
+.case-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.case-card.hidden { display: none; }
+.case-card-header { padding: 24px 24px 0; }
+.case-domain {
+  font-size: 10px; font-family: var(--font-mono); color: var(--purple);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;
+}
+.case-title {
+  font-size: 17px; font-weight: 500; color: var(--ink);
+  line-height: 1.3; margin-bottom: 6px;
+}
+.case-subtitle {
+  font-size: 13px; color: var(--ink3); margin-bottom: 14px;
+  font-style: italic;
+}
+.case-impact {
+  font-size: 14px; /* 글자 크기 조정 */
+  font-weight: 600; /* 조금 더 두껍게 */
+  color: var(--purple); /* 브랜드 컬러인 보라색 적용 */
+  background: var(--purple-light); /* 연한 보라색 배경 박스 */
+  padding: 6px 12px; /* 박스 안쪽 여백 */
+  border-radius: 6px; /* 박스 모서리 둥글게 */
+  display: inline-block; /* 텍스트 길이에 딱 맞는 박스 크기 */
+  margin-top: 12px; /* 위쪽과의 간격 */
+  line-height: 1.4;
+}
+.case-tags { display: flex; gap: 5px; flex-wrap: wrap; padding: 14px 24px 16px; }
+.case-tag {
+  font-size: 11px; padding: 2px 8px; border-radius: 999px;
+  background: var(--purple-light); color: var(--purple-dark);
+}
+.case-expand-btn {
+  width: 100%; padding: 11px 24px; background: var(--bg3);
+  border: none; border-top: 0.5px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px; color: var(--ink2); cursor: pointer; font-family: var(--font-sans);
+  transition: background var(--t), color var(--t); letter-spacing: 0.02em;
+}
+.case-expand-btn:hover { background: var(--purple-light); color: var(--purple-dark); }
+.expand-icon { transition: transform var(--t); font-size: 10px; }
+.case-card.expanded .expand-icon { transform: rotate(180deg); }
+.case-detail {
+  display: none; padding: 20px 24px 24px;
+  border-top: 0.5px solid var(--border); background: var(--bg);
+}
+.case-card.expanded .case-detail { display: block; }
+.case-detail-row {
+  display: grid; grid-template-columns: 76px 1fr;
+  gap: 6px 16px; margin-bottom: 12px;
+}
+.case-detail-row:last-child { margin-bottom: 0; }
+.case-detail-key {
+  font-size: 10px; color: var(--ink3); font-family: var(--font-mono);
+  text-transform: uppercase; letter-spacing: 0.06em; padding-top: 2px;
+}
+.case-detail-val { font-size: 13px; color: var(--ink2); line-height: 1.65; }
+
+/* =============================================
+   04. HOW I THINK
+   ============================================= */
+#think { background: var(--bg2); }
+.think-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+.think-step {
+  padding: 32px 28px; border-right: 0.5px solid var(--border);
+  transition: background var(--t);
+  position: relative;
+}
+.think-step:last-child { border-right: none; }
+.think-step:hover { background: var(--bg); }
+.think-num {
+  font-size: 11px; font-family: var(--font-mono); color: var(--purple);
+  margin-bottom: 20px; display: block;
+}
+.think-label {
+  font-size: 15px; font-weight: 500; color: var(--ink);
+  margin-bottom: 10px; line-height: 1.3;
+}
+.think-desc { font-size: 13px; color: var(--ink2); line-height: 1.65; }
+.think-border {
+  border: 0.5px solid var(--border); border-radius: var(--radius-lg);
+  overflow: hidden; margin-top: 48px;
+}
+
+/* =============================================
+   05. CAREER PATH
+   ============================================= */
+.path-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.path-card {
+  background: var(--bg2); border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px 22px;
+  transition: border-color var(--t), background var(--t), transform var(--t);
+  position: relative; overflow: hidden;
+}
+.path-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--purple); opacity: 0;
+  transition: opacity var(--t);
+}
+.path-card:hover { border-color: var(--border2); background: var(--bg); transform: translateY(-2px); }
+.path-card:hover::before { opacity: 1; }
+.path-phase {
+  font-size: 10px; font-family: var(--font-mono); color: var(--purple);
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;
+}
+.path-period {
+  font-size: 11px; font-family: var(--font-mono); color: var(--ink3);
+  margin-bottom: 14px; display: block;
+}
+.path-role {
+  font-size: 14px; font-weight: 500; color: var(--ink);
+  margin-bottom: 10px; line-height: 1.3;
+}
+.path-desc { font-size: 12px; color: var(--ink2); line-height: 1.65; margin-bottom: 16px; }
+.path-learning {
+  display: block; /* 줄바꿈 적용 */
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--purple); /* 보라색 글자 */
+  text-transform: uppercase; /* 대문자로 변환 */
+  margin-top: 8px;
+  letter-spacing: 0.05em;
+}
+.path-skills { display: flex; flex-wrap: wrap; gap: 4px; }
+.path-skill {
+  font-size: 10px; padding: 2px 7px; border-radius: 999px;
+  background: var(--purple-light); color: var(--purple-dark);
+}
+.path-connector {
+  display: none; /* shown via JS on desktop */
+}
+
+/* =============================================
+   06. CONTACT
+   ============================================= */
+#contact { background: var(--bg); border-top: 0.5px solid var(--border); }
+.contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.contact-heading {
+  font-size: clamp(30px, 4.5vw, 48px); font-weight: 300;
+  letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 20px;
+}
+.contact-heading em { font-style: normal; color: var(--purple); }
+.contact-body {
+  font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 32px; max-width: 400px;
+}
+.contact-availability {
+  display: inline-flex; align-items: center; gap: 7px; font-size: 12px;
+  color: var(--teal); background: var(--teal-light);
+  border: 0.5px solid rgba(29,158,117,0.2); border-radius: 999px;
+  padding: 4px 13px; margin-bottom: 28px; font-family: var(--font-mono);
+}
+.contact-availability::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal); animation: pulse 2s infinite;
+}
+.contact-links {
+  display: flex; flex-direction: column; gap: 0;
+  border: 0.5px solid var(--border2); border-radius: var(--radius-lg); overflow: hidden;
+}
+.contact-link {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 0.5px solid var(--border);
+  transition: background var(--t); cursor: pointer;
+}
+.contact-link:last-child { border-bottom: none; }
+.contact-link:hover { background: var(--purple-light); }
+.link-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+.link-val { font-size: 12px; color: var(--purple); font-family: var(--font-mono); }
+.contact-note {
+  margin-top: 20px; font-size: 12px; color: var(--ink3); line-height: 1.6;
+  padding-top: 16px; border-top: 0.5px solid var(--border);
+}
+
+/* =============================================
+   TOAST
+   ============================================= */
+.toast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--ink); color: var(--bg); font-size: 13px;
+  padding: 10px 20px; border-radius: var(--radius);
+  opacity: 0; transition: all 0.28s; pointer-events: none;
+  z-index: 300; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 960px) {
+  .profile-grid { grid-template-columns: 1fr 1fr; }
+  .think-grid { grid-template-columns: 1fr 1fr; }
+  .think-step:nth-child(2) { border-right: none; }
+  .think-step:nth-child(1),
+  .think-step:nth-child(2) { border-bottom: 0.5px solid var(--border); }
+  .path-grid { grid-template-columns: 1fr 1fr; }
+  .contact-layout { grid-template-columns: 1fr; gap: 48px; }
+}
+@media (max-width: 640px) {
+  .section { padding: 64px 0; }
+  #hero { padding-top: 110px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .profile-grid { grid-template-columns: 1fr; }
+  .cases-grid { grid-template-columns: 1fr; }
+  .think-grid { grid-template-columns: 1fr; }
+  .think-step { border-right: none; border-bottom: 0.5px solid var(--border); }
+  .think-step:last-child { border-bottom: none; }
+  .path-grid { grid-template-columns: 1fr; }
+  .hero-metrics { width: 100%; }
+  .hero-metric { flex: 1; padding: 14px 16px; min-width: 0; }
+  .cases-header { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 380px) {
+  .hero-metrics { flex-direction: column; }
+  .hero-metric { border-right: none; border-bottom: 0.5px solid var(--border2); }
+  .hero-metric:last-child { border-bottom: none; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">DY.KO</span>
+    <ul class="nav-links">
+      <li><a href="#profile">Profile</a></li>
+      <li><a href="#cases">Cases</a></li>
+      <li><a href="#think">Thinking</a></li>
+      <li><a href="#path">Career</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#" class="btn-primary" style="padding: 6px 14px; font-size: 12px; margin-right: 12px;" onclick="downloadCV(event)">Download CV</a>
+      <div class="theme-toggle" id="themeToggle"></div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#profile" onclick="closeMobileMenu()">Profile</a>
+  <a href="#cases" onclick="closeMobileMenu()">Cases</a>
+  <a href="#think" onclick="closeMobileMenu()">Thinking</a>
+  <a href="#path" onclick="closeMobileMenu()">Career</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<!-- 01. HERO -->
+<section id="hero">
+  <div class="container">
+
+    <div class="hero-status reveal">Open to brand &amp; commercial strategy roles</div>
+    <p class="hero-name reveal reveal-delay-1">Do Yeon Ko</p>
+    
+    <h2 style="font-size: 14px; color: var(--purple); font-family: var(--font-mono); margin-bottom: 8px;" class="reveal reveal-delay-1">
+  Strategic Marketer & Commercial Lead
+</h2>
+
+    <h1 class="hero-title reveal reveal-delay-2">
+      Brand strategy<br>
+      built on<br>
+      <em>commercial depth.</em>
+    </h1>
+
+    <p class="hero-sub reveal reveal-delay-3">
+      Brand and commercial strategist with FMCG depth across brand building,
+      retail execution, and investment decisions,
+      all within the same portfolio from the ground up.
+    </p>
+
+    <div class="hero-tags reveal reveal-delay-3">
+      <span class="hero-tag">Brand Strategy</span>
+      <span class="hero-tag">Commercial Planning</span>
+      <span class="hero-tag">Data Translation</span>
+    </div>
+
+    <div class="hero-metrics reveal reveal-delay-3">
+      <div class="hero-metric">
+        <span class="metric-num" data-target="4" data-suffix="+">0</span>
+        <span class="metric-label">Yrs, J&amp;J / Kenvue</span>
+      </div>
+      <div class="hero-metric">
+        <span class="metric-num" data-target="58" data-suffix="%">0</span>
+        <span class="metric-label">Category YoY Growth</span>
+      </div>
+      <div class="hero-metric">
+        <span class="metric-num" data-target="4" data-suffix="">0</span>
+        <span class="metric-label">Brands, MMM</span>
+      </div>
+    </div>
+
+    <div class="hero-actions reveal reveal-delay-4">
+      <a href="#cases" class="btn-primary">View Selected Cases &darr;</a>
+      <a href="#contact" class="btn-ghost">Get in Touch</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- 02. STRATEGIC PROFILE -->
+<section class="section" id="profile">
+  <div class="container">
+    <div class="section-eyebrow reveal">02 &mdash; Strategic Profile</div>
+    <h2 class="section-title reveal reveal-delay-1">Three lenses.<br>One connected view.</h2>
+
+    <div class="profile-grid">
+
+      <div class="profile-card reveal reveal-delay-1">
+        <div class="profile-lens">Brand Perspective</div>
+        <div class="profile-card-title">Brand strategy starts with what the shopper actually sees.</div>
+        <p class="profile-card-body">
+          Built seasonal campaign claims from brief to channel execution, directed digital content,
+          and led GTM into new platforms. The discipline: translating brand positioning into
+          something concrete at every touchpoint &mdash; not just in decks, but on the shelf and in the feed.
+        </p>
+        <div class="profile-tags">
+          <span class="profile-tag">Seasonal Planning</span>
+          <span class="profile-tag">Claim Development</span>
+          <span class="profile-tag">Content Direction</span>
+          <span class="profile-tag">New Channel GTM</span>
+        </div>
+      </div>
+
+      <div class="profile-card reveal reveal-delay-2">
+        <div class="profile-lens">Commercial Perspective</div>
+        <div class="profile-card-title">Category growth is engineered, not assumed.</div>
+        <p class="profile-card-body">
+          Owned full-funnel commerce across two major retail channels &mdash; digital shelf strategy,
+          promotional architecture, retailer negotiation, and P&amp;L accountability.
+          Drove category-level outcomes, not just brand-level metrics.
+        </p>
+        <div class="profile-tags">
+          <span class="profile-tag">Digital Shelf</span>
+          <span class="profile-tag">Promo Architecture</span>
+          <span class="profile-tag">Retail Negotiation</span>
+          <span class="profile-tag">P&amp;L Mgmt</span>
+        </div>
+      </div>
+
+      <div class="profile-card reveal reveal-delay-3">
+        <div class="profile-lens">Decision Perspective</div>
+        <div class="profile-card-title">Data is only useful when it changes what gets decided.</div>
+        <p class="profile-card-body">
+          Served as data translator between analytics and commercial teams &mdash; leading MMM across
+          4 brands and RGM for pricing optimization. The output was not reports.
+          It was reframed investment decisions.
+        </p>
+        <div class="profile-tags">
+          <span class="profile-tag">Marketing Mix Modeling</span>
+          <span class="profile-tag">RGM</span>
+          <span class="profile-tag">ROI Analysis</span>
+          <span class="profile-tag">Budget Simulation</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 03. SELECTED CASES -->
+<section class="section" id="cases">
+  <div class="container">
+    <div class="section-eyebrow reveal">03 &mdash; Selected Cases</div>
+
+    <div class="cases-header">
+      <h2 class="section-title reveal reveal-delay-1" style="margin-bottom:0">Five problems.<br>Five decisions.</h2>
+      <div class="case-filters reveal reveal-delay-2">
+        <button class="case-filter active" data-case-filter="all">All</button>
+        <button class="case-filter" data-case-filter="investment">Investment</button>
+        <button class="case-filter" data-case-filter="commerce">Commerce</button>
+        <button class="case-filter" data-case-filter="brand">Brand</button>
+      </div>
+    </div>
+
+    <div class="cases-grid">
+
+      <!-- CASE 01: MMM -->
+      <div class="case-card reveal" data-case-cat="investment">
+        <div class="case-card-header">
+          <div class="case-domain">Investment Efficiency &middot; Decision Support</div>
+          <div class="case-title">Channel ROI &amp; Investment Strategy</div>
+          <div class="case-subtitle">Marketing Mix Modeling &mdash; 4 OTC &amp; Personal Care Brands</div>
+          <div class="case-impact">Reframed how 4 brands allocate<br>marketing investment across channels</div>
+        </div>
+        <div class="case-tags">
+          <span class="case-tag">MMM</span>
+          <span class="case-tag">4 brands</span>
+          <span class="case-tag">Channel ROI</span>
+          <span class="case-tag">Budget Simulation</span>
+        </div>
+        <button class="case-expand-btn"><span>Read the case</span><span class="expand-icon">&#9660;</span></button>
+        <div class="case-detail">
+          <div class="case-detail-row">
+            <span class="case-detail-key">Situation</span>
+            <span class="case-detail-val">Budget decisions for Tylenol, Nicorette, Rogaine, and Listerine were made without systematic channel attribution &mdash; leadership relied on experience and past spend patterns with no way to model the efficiency of reallocation.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Insight</span>
+            <span class="case-detail-val">Each brand had a different channel sensitivity profile. Tylenol&rsquo;s ROI was flu-season dependent; Listerine&rsquo;s was driven by promotion depth at specific channels. A single model couldn&rsquo;t serve all four &mdash; and external variable validation was critical to any credible output.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Action</span>
+            <span class="case-detail-val">Architected the end-to-end MMM process: aligned 2 modeling agencies and 10+ media agencies on data standards, managed data collection and cleansing, validated external variables (flu index, economic indicators), and translated model outputs into scenario-based simulation sheets for leadership budget planning.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Impact</span>
+            <span class="case-detail-val">Channel-level ROI insights were embedded into the annual budgeting cycle for all 4 brands. Scenario planning replaced intuition-led allocation &mdash; moving marketing investment decisions from historical pattern to modeled efficiency.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASE 02: RGM -->
+      <div class="case-card reveal reveal-delay-1" data-case-cat="investment">
+        <div class="case-card-header">
+          <div class="case-domain">Pricing &amp; Promotion Optimization &middot; RGM</div>
+          <div class="case-title">Price &amp; Promotion Strategy &mdash; Listerine</div>
+          <div class="case-subtitle">Revenue Growth Management via NielsenIQ Elasticity Data</div>
+          <div class="case-impact">Replaced intuition-based pricing<br>with elasticity-grounded scenarios</div>
+        </div>
+        <div class="case-tags">
+          <span class="case-tag">RGM</span>
+          <span class="case-tag">Price Elasticity</span>
+          <span class="case-tag">NielsenIQ</span>
+          <span class="case-tag">Demand Simulation</span>
+        </div>
+        <button class="case-expand-btn"><span>Read the case</span><span class="expand-icon">&#9660;</span></button>
+        <div class="case-detail">
+          <div class="case-detail-row">
+            <span class="case-detail-key">Situation</span>
+            <span class="case-detail-val">Listerine&rsquo;s pricing and promotional decisions were applied uniformly across channels &mdash; with no visibility into whether the same discount mechanics were generating equivalent demand responses in different retail environments.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Insight</span>
+            <span class="case-detail-val">Price elasticity differs materially by channel. The same discount depth produces structurally different uplift depending on shopper profile, basket behavior, and platform mechanics &mdash; meaning a uniform promo strategy was systematically over-investing in low-sensitivity channels.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Action</span>
+            <span class="case-detail-val">Built demand simulation tools using NielsenIQ price and promotion elasticity data. Modeled NTS uplift scenarios by channel, identified elasticity gaps, and proposed calibrated promotion options aligned to each channel&rsquo;s sensitivity curve.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Impact</span>
+            <span class="case-detail-val">Delivered a channel-differentiated pricing and promotion framework. Provided the commercial team with simulation-backed options to improve P&amp;L contribution and reduce promotional spend in low-return environments.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASE 03: Oliveyoung -->
+      <div class="case-card reveal reveal-delay-2" data-case-cat="commerce">
+        <div class="case-card-header">
+          <div class="case-domain">Digital Shelf &amp; Category Growth</div>
+          <div class="case-title">Category Leadership on Oliveyoung H&amp;B</div>
+          <div class="case-subtitle">Full-funnel Commerce &mdash; Aveeno, Neutrogena Body, Johnson&rsquo;s</div>
+          <div class="case-impact">+58% YoY &middot; Aveeno #1 in body care<br>Sold out in 3 days</div>
+        </div>
+        <div class="case-tags">
+          <span class="case-tag">+58% YoY</span>
+          <span class="case-tag">Digital Shelf</span>
+          <span class="case-tag">Full-funnel</span>
+          <span class="case-tag">Retailer Negotiation</span>
+        </div>
+        <button class="case-expand-btn"><span>Read the case</span><span class="expand-icon">&#9660;</span></button>
+        <div class="case-detail">
+          <div class="case-detail-row">
+            <span class="case-detail-key">Situation</span>
+            <span class="case-detail-val">After expanding scope to Oliveyoung&rsquo;s online H&amp;B channel, the portfolio had brand awareness but lacked a structured digital shelf strategy &mdash; resulting in diffuse brand presence and below-potential conversion across Aveeno, Neutrogena Body, and Johnson&rsquo;s.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Insight</span>
+            <span class="case-detail-val">Oliveyoung&rsquo;s H&amp;B shoppers are driven by community, curation, and discovery &mdash; not price. Generic discount promotions underperform against story-led activations with a clear concept and exclusivity signal.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Action</span>
+            <span class="case-detail-val">Elevated the platform strategy from promotional calendar to brand-building: designed the Aveeno showcase around an exclusive robe bundle and Wallace &amp; Gromit onpack framed as a &ldquo;couple look&rdquo; concept. Negotiated premium placement slots. Also recruited, onboarded, and mentored an intern through the full project delivery cycle.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Impact</span>
+            <span class="case-detail-val">Category +58% YoY. Aveeno +17.9% YTD (online mix +3.9pp). Neutrogena Body +80.7% YTD (mix +6.7pp). Johnson&rsquo;s +77.9% YTD. Aveeno showcase reached #1 in body care on Oliveyoung &mdash; sold out in 3 days.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASE 04: SSG -->
+      <div class="case-card reveal reveal-delay-3" data-case-cat="commerce">
+        <div class="case-card-header">
+          <div class="case-domain">Cross-Category Promotion Strategy</div>
+          <div class="case-title">Joint Promotion Architecture on SSG.COM</div>
+          <div class="case-subtitle">Cross-brand Collaboration &mdash; Kenvue &times; External Partners</div>
+          <div class="case-impact">to +Achieved +103% sales uplift<br>& Won 2025 Kenvue 5P Award &mdash; Promotion</div>
+        </div>
+        <div class="case-tags">
+          <span class="case-tag">+103% Uplift</span>
+          <span class="case-tag">Cross-category</span>
+          <span class="case-tag">Partnership</span>
+          <span class="case-tag">Promo Strategy</span>
+        </div>
+        <button class="case-expand-btn"><span>Read the case</span><span class="expand-icon">&#9660;</span></button>
+        <div class="case-detail">
+          <div class="case-detail-row">
+            <span class="case-detail-key">Situation</span>
+            <span class="case-detail-val">The hypermarket channel was in structural decline. Repeat single-brand promotions were producing diminishing incremental returns &mdash; shoppers had become desensitized to standard discount mechanics.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Insight</span>
+            <span class="case-detail-val">Category-crossing collaborations activate a different purchase driver: gifting intent, discovery, and novelty &mdash; not price comparison. The creative concept is the conversion lever, not the depth of discount.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Action</span>
+            <span class="case-detail-val">Conceptualized and executed cross-category campaigns from scratch: Listerine &times; Oral-B, Johnson&rsquo;s &times; Chupa Chups, Neutrogena &times; Lindt. Anchored each to a seasonal or category trend. Secured main rolling banner and recommendation shelf placements.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Impact</span>
+            <span class="case-detail-val">Up to +103% sales uplift vs. prior promotions. SSG channel +23.6% YoY, accounting for 45.4% of total Emart channel revenue. Recognized with the 2025 Kenvue 5P Award in Promotion.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASE 05: Neutrogena Campaign -->
+      <div class="case-card reveal" data-case-cat="brand">
+        <div class="case-card-header">
+          <div class="case-domain">Seasonal Campaign Architecture</div>
+          <div class="case-title">Full-season Campaign Ownership &mdash; Neutrogena H&amp;B</div>
+          <div class="case-subtitle">Claim Development to Channel Execution &middot; 30+ SKUs</div>
+          <div class="case-impact">Owned every layer of the campaign:<br>brief, claim, asset, channel, PDP</div>
+        </div>
+        <div class="case-tags">
+          <span class="case-tag">30+ SKUs</span>
+          <span class="case-tag">Campaign Strategy</span>
+          <span class="case-tag">Claim Dev</span>
+          <span class="case-tag">New Channel GTM</span>
+        </div>
+        <button class="case-expand-btn"><span>Read the case</span><span class="expand-icon">&#9660;</span></button>
+        <div class="case-detail">
+          <div class="case-detail-row">
+            <span class="case-detail-key">Situation</span>
+            <span class="case-detail-val">Neutrogena H&amp;B required seasonal campaigns that simultaneously built brand equity and drove sell-through &mdash; across a 30+ SKU portfolio coordinated between global guidelines and local market realities.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Insight</span>
+            <span class="case-detail-val">Ingredient-led educational content builds category authority while converting &mdash; particularly for body lotion and sunscreen where shoppers research before purchasing. Short-form content that explains the &ldquo;why&rdquo; outperforms brand-forward creative in this category.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Action</span>
+            <span class="case-detail-val">Owned the full campaign architecture: developed seasonal claims, directed digital asset production, created short-form educational content, and led GTM into digital gifting channels including Kakao Gift. Revamped PDPs for Rainbath (3 SKUs) and Visibly Renew Body Lotion using consumer interview and review data to realign claims with actual purchase motivations.</span>
+          </div>
+          <div class="case-detail-row">
+            <span class="case-detail-key">Impact</span>
+            <span class="case-detail-val">Summer and winter campaigns executed across online and offline channels with full global-local alignment. PDP revamp delivered brand-shopper aligned product pages grounded in consumer language. New digital gift channel entry expanded touchpoints at a high-conversion moment.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 04. HOW I THINK -->
+<section class="section" id="think">
+  <div class="container">
+    <div class="section-eyebrow reveal">04 &mdash; How I Think</div>
+    <h2 class="section-title reveal reveal-delay-1">Not a formula.<br>A way of working through problems.</h2>
+
+    <div class="think-border reveal reveal-delay-2">
+      <div class="think-grid">
+        <div class="think-step">
+          <span class="think-num">01</span>
+          <div class="think-label">Read the market</div>
+          <div class="think-desc">Category dynamics, shopper behavior, platform mechanics, competitive signals. Context before conclusion &mdash; always.</div>
+        </div>
+        <div class="think-step">
+          <span class="think-num">02</span>
+          <div class="think-label">Find the signal</div>
+          <div class="think-desc">Separate what&rsquo;s loud from what&rsquo;s causal. One elasticity curve, one channel pattern, one review insight &mdash; the signal is rarely the first thing visible in the data.</div>
+        </div>
+        <div class="think-step">
+          <span class="think-num">03</span>
+          <div class="think-label">Translate into action</div>
+          <div class="think-desc">Insight without alignment is observation. The translation step &mdash; from data to campaign, shelf strategy, or investment decision &mdash; is where the real work happens.</div>
+        </div>
+        <div class="think-step">
+          <span class="think-num">04</span>
+          <div class="think-label">Measure what moved</div>
+          <div class="think-desc">Not just topline, but mix shift, contribution margin, and behavioral change. Metrics are defined before launch, not reverse-engineered after.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 05. CAREER PATH -->
+<section class="section" id="path">
+  <div class="container">
+    <div class="section-eyebrow reveal">05 &mdash; Career Path</div>
+    <h2 class="section-title reveal reveal-delay-1">From execution<br>to strategic decision support.</h2>
+
+    <div class="path-grid">
+
+      <div class="path-card reveal reveal-delay-1">
+        <div class="path-phase">Brand Foundation</div>
+        <span class="path-period">2022.01 &mdash; 2022.12</span>
+        <div class="path-role">Johnson&rsquo;s &amp; Aveeno Baby</div>
+        <p class="path-desc">Built the fundamentals: PDP architecture, media mix campaigns, cross-brand collaboration, and live commerce performance analysis. Managed 40+ SKUs across two brand families.</p>
+        <span class="path-learning">Key Learning: Execution Excellence</span>
+        <div class="path-skills">
+          <span class="path-skill">PDP Optimization</span>
+          <span class="path-skill">Media Mix</span>
+          <span class="path-skill">Live Commerce</span>
+          <span class="path-skill">40+ SKUs</span>
+        </div>
+      </div>
+
+      <div class="path-card reveal reveal-delay-2">
+        <div class="path-phase">Campaign Ownership</div>
+        <span class="path-period">2023.01 &mdash; 2024.06</span>
+        <div class="path-role">Neutrogena Hand &amp; Body</div>
+        <p class="path-desc">Took full ownership of seasonal campaign architecture &mdash; claim development, digital asset production, channel execution &mdash; and led GTM into new digital channels. Managed 30+ SKUs with global-local alignment.</p>
+        <span class="path-learning">Key Learning: Strategic Consistency</span>
+        <div class="path-skills">
+          <span class="path-skill">Claim Development</span>
+          <span class="path-skill">Campaign Strategy</span>
+          <span class="path-skill">New Channel GTM</span>
+          <span class="path-skill">30+ SKUs</span>
+        </div>
+      </div>
+
+      <div class="path-card reveal reveal-delay-3">
+        <div class="path-phase">Commercial Acceleration</div>
+        <span class="path-period">2024.07 &mdash; 2025.07</span>
+        <div class="path-role">Oliveyoung &amp; SSG</div>
+        <p class="path-desc">Shifted from brand to full commercial ownership: P&amp;L accountability, digital shelf strategy, promotional architecture, cross-category collaboration, and retailer negotiation. Drove +58% YoY category growth.</p>
+        <span class="path-learning">Key Learning: P&L & Growth Ownership</span>
+        <div class="path-skills">
+          <span class="path-skill">P&amp;L Mgmt</span>
+          <span class="path-skill">Digital Shelf</span>
+          <span class="path-skill">Promo Architecture</span>
+          <span class="path-skill">+58% YoY</span>
+        </div>
+      </div>
+
+      <div class="path-card reveal reveal-delay-4">
+        <div class="path-phase">Decision &amp; Optimization</div>
+        <span class="path-period">2025.08 &mdash; Present</span>
+        <div class="path-role">DAS &amp; Biz Excellence</div>
+        <p class="path-desc">Moved from execution into strategic decision support. Leading MMM for 4 brands, RGM for pricing optimization, and Brand Funnel analytics &mdash; serving as bridge between commercial data and investment decisions at the leadership level.</p>
+        <span class="path-learning">Focus: Data-Driven Decision Support</span>
+        <div class="path-skills">
+          <span class="path-skill">MMM</span>
+          <span class="path-skill">RGM</span>
+          <span class="path-skill">Data Translation</span>
+          <span class="path-skill">4 brands</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 06. CONTACT -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="contact-layout">
+
+      <div>
+        <div class="section-eyebrow reveal">06 &mdash; Contact</div>
+        <h2 class="contact-heading reveal reveal-delay-1">
+          Open to<br>
+          <em>strategic</em><br>
+          conversations.
+        </h2>
+        <div class="contact-availability reveal reveal-delay-2">
+          Exploring brand &amp; commercial strategy roles
+        </div>
+        <p class="contact-body reveal reveal-delay-2">
+          Interested in brand strategy, commercial planning, or growth strategy roles
+          where brand thinking and commercial accountability intersect.
+          If my background is relevant to your team,
+          I&rsquo;d welcome the opportunity to connect.
+        </p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap" class="reveal reveal-delay-3">
+          <a href="mailto:sydneyko0412@gmail.com" class="btn-primary">Send a message &rarr;</a>
+          <a href="#" class="btn-ghost" onclick="downloadCV(event)">Download CV</a>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-2">
+        <div class="contact-links">
+          <div class="contact-link" onclick="copyEmail()">
+            <span class="link-name">Email</span>
+            <span class="link-val">sydneyko0412@gmail.com</span>
+          </div>
+          <div class="contact-link" onclick="window.open('https://linkedin.com/in/do-yeon-‍ko-651b9a228','_blank')">
+            <span class="link-name">LinkedIn</span>
+            <span class="link-val">linkedin.com/in/do-yeon-‍ko-651b9a228 &nearr;</span>
+          </div>
+          <div class="contact-link" onclick="downloadCV(event)">
+            <span class="link-name">R&eacute;sum&eacute;</span>
+            <span class="link-val">Download PDF &darr;</span>
+          </div>
+        </div>
+        <p class="contact-note">
+          Based in Seoul &middot; Open to Korea and international opportunities &middot; Korean and English fluent
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* Dark mode */
+const toggle = document.getElementById('themeToggle');
+const saved = localStorage.getItem('theme');
+if (saved) document.documentElement.dataset.theme = saved;
+toggle.addEventListener('click', () => {
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem('theme', next);
+});
+
+/* Mobile menu */
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+function closeMobileMenu() { mobileMenu.classList.remove('open'); }
+
+/* Scroll reveal */
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.1 }
+);
+revealEls.forEach(el => revealObserver.observe(el));
+
+/* KPI count-up */
+function countUp(el) {
+  const target = parseInt(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const steps = Math.min(target, 60);
+  const interval = 1400 / steps;
+  let current = 0;
+  const inc = target / steps;
+  const timer = setInterval(() => {
+    current = Math.min(current + inc, target);
+    el.textContent = Math.round(current) + suffix;
+    if (current >= target) clearInterval(timer);
+  }, interval);
+}
+const metricsObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.metric-num[data-target]').forEach(countUp);
+      metricsObserver.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+const heroMetrics = document.querySelector('.hero-metrics');
+if (heroMetrics) metricsObserver.observe(heroMetrics);
+
+/* Case expand/collapse */
+document.querySelectorAll('.case-expand-btn').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const card = btn.closest('.case-card');
+    const isOpen = card.classList.contains('expanded');
+    card.classList.toggle('expanded', !isOpen);
+    btn.querySelector('span:first-child').textContent = isOpen ? 'Read the case' : 'Close';
+  });
+});
+
+/* Case filter */
+document.querySelectorAll('.case-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.case-filter').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.caseFilter;
+    document.querySelectorAll('.case-card').forEach(card => {
+      const cats = card.dataset.caseCat || '';
+      card.classList.toggle('hidden', filter !== 'all' && !cats.includes(filter));
+    });
+  });
+});
+
+/* Toast */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* Copy email */
+function copyEmail() {
+  navigator.clipboard.writeText('sydneyko0412@gmail.com')
+    .then(() => showToast('Email copied to clipboard'))
+    .catch(() => { window.location.href = 'mailto:sydneyko0412@gmail.com'; });
+}
+
+/* CV download — replace with actual path */
+function downloadCV(e) {
+  e.preventDefault();
+  // 준비한 PDF 파일을 새 창에서 엽니다.
+  window.open('./resume_doyeon_v4_full.pdf', '_blank'); 
+  showToast('Opening Resume PDF...');
+}
+</script>
+
+</body>
+</html>
